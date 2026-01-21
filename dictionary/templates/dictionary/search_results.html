@@ -1,0 +1,31 @@
+{% extends 'dictionary/base.html' %}
+
+{% block content %}
+<div class="search-page">
+    <div class="search-box">
+
+        <h2 class="search-title">
+            Qidirish natijalari:
+            <span class="query">"{{ query }}"</span>
+        </h2>
+
+        {% if words %}
+            <ul class="word-list">
+                {% for word in words %}
+                    <li class="word-item">
+                        <a href="{% url 'word_detail' word.slug %}" class="word-link">
+                            {{ word.word }}
+                        </a>
+                        <p class="word-definition">
+                            {{ word.definition|truncatechars:120 }}
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-result">Hech narsa topilmadi.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'dictionary/base.html' %}
+
+{% block content %}
+<div class="word-page">
+    <div class="word-box">
+
+        <div class="word-header">
+            <h1 class="word-title">{{ word.word }}</h1>
+            {% if word.pronunciation %}
+                <div class="pronunciation">/{{ word.pronunciation }}/</div>
+            {% endif %}
+        </div>
+
+        <div class="definition">
+            <h3>Ta’rif</h3>
+            <p>{{ word.definition }}</p>
+        </div>
+
+        <div class="meta">
+            <div class="meta-row">
+                <span class="label">Harflar soni:</span>
+                <span class="value">{{ word.letter_count }}</span>
+            </div>
+
+            {% if word.categories.all %}
+            <div class="meta-row">
+                <span class="label">Kategoriyalar:</span>
+                <span class="value">
+                    {% for category in word.categories.all %}
+                        <a href="{% url 'category_detail' category.slug %}" class="category">
+                            {{ category.name }}
+                        </a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="actions">
+            <a href="/" class="link">Bosh sahifa</a>
+            <a href="javascript:history.back()" class="link secondary">Orqaga</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'dictionary/base.html' %}
+
+{% block content %}
+<div class="section search-section">
+    <h2>So‘z qidirish</h2>
+    <form action="{% url 'search' %}" method="get" class="search-form">
+        <input type="text" name="q" placeholder="So‘z yoki ta’rifni kiriting..." class="search-input" id="search-input">
+        <button type="submit" class="search-button">Qidirish</button>
+    </form>
+
+    <!-- Real-time search results container -->
+    <div id="search-results" class="search-results" style="display: none;">
+        <div class="results-header">
+            <h3>Tezkor natijalar</h3>
+        </div>
+        <div id="results-list" class="results-list">
+            <!-- Results will be populated here -->
+        </div>
+    </div>
+</div>
+<div class="main-container">
+    <div class="section full-width">
+        <h2>Alfabit bo‘yicha qidirish</h2>
+        <div class="alphabet">
+            {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+            <a href="{% url 'words_by_letter' letter %}">{{ letter }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Ko‘p qidirilgan so‘zlar</h2>
+        <ul class="word-list">
+            {% for word in most_searched %}
+            <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'category_detail' 'most-searched' %}" class="see-all">Hammasini ko‘rish</a>
+    </div>
+
+    <div class="section">
+        <h2>Tasodifiy so‘zlar</h2>
+        <ul class="word-list">
+            {% for word in random_words %}
+            <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'category_detail' 'random' %}" class="see-all">Hammasini ko‘rish</a>
+    </div>
+
+    <div class="section">
+        <h2>Ko‘p xato qilinadigan so‘zlar</h2>
+        <ul class="word-list">
+            {% for word in common_misspelled %}
+            <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'category_detail' 'kop-xato-qilinadigan-sozlar' %}" class="see-all">Hammasini ko‘rish</a>
+    </div>
+
+    <!-- <div class="section">
+        <h2>Qiziqarli ruknlar</h2>
+        <div class="categories-grid">
+            {% for category in interesting_categories %}
+            <div class="category-card">
+                <a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Harflar soni bo‘yicha</h2>
+        <ul class="word-list">
+            {% for i in "345678910" %}
+            <li><a href="{% url 'words_by_letter_count' i %}">{{ i }} ta harfli so‘zlar</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Siz uchun qiziq bo‘lishi mumkin</h2>
+        <ul class="word-list">
+            {% for word in suggested_words %}
+            <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
+            {% endfor %}
+        </ul>
+    </div> -->
+</div>
+{% endblock %}

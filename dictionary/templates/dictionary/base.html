@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibro.uz</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dictionary/css/style.css' %}">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <h1><a href="/">Ibro.uz</a></h1>
+            <ul>
+                <li><a style="font-size: large;" href="/">Bosh sahifa</a></li>
+                <li><a style="font-size: large;" href="/admin/">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+        <p>&copy; 2026 Ibro.uz - O'zbek tiling izohli lug'ati asosida tuzilgan Lingvomadaniy lug'ati.</p>
+    </footer>
+
+    <script>
+        // Real-time search functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('search-input');
+            const searchResults = document.getElementById('search-results');
+            const resultsList = document.getElementById('results-list');
+            let searchTimeout;
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    const query = this.value.trim();
+
+                    // Clear previous timeout
+                    clearTimeout(searchTimeout);
+
+                    if (query.length < 2) {
+                        searchResults.style.display = 'none';
+                        return;
+                    }
+
+                    // Debounce search requests
+                    searchTimeout = setTimeout(() => {
+                        performSearch(query);
+                    }, 300);
+                });
+
+                // Hide results when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                        searchResults.style.display = 'none';
+                    }
+                });
+            }
+
+            function performSearch(query) {
+                fetch(`/search/?q=${encodeURIComponent(query)}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        displayResults(data.results, query);
+                    })
+                    .catch(error => {
+                        console.error('Search error:', error);
+                    });
+            }
+
+            function displayResults(results, query) {
+                if (results.length === 0) {
+                    resultsList.innerHTML = '<div class="no-results">Hech narsa topilmadi</div>';
+                    searchResults.style.display = 'block';
+                    return;
+                }
+
+                let html = '';
+                results.forEach(result => {
+                    // Highlight matching text
+                    const highlightedWord = highlightMatch(result.word, query);
+                    const highlightedDef = highlightMatch(result.definition, query);
+
+                    html += `
+                        <div class="result-item">
+                            <a href="${result.url}" class="result-link">
+                                <div class="result-word">${highlightedWord}</div>
+                                <div class="result-definition">${highlightedDef}</div>
+                                <div class="result-meta">${result.letter_count} ta harf</div>
+                            </a>
+                        </div>
+                    `;
+                });
+
+                resultsList.innerHTML = html;
+                searchResults.style.display = 'block';
+            }
+
+            function highlightMatch(text, query) {
+                if (!query) return text;
+
+                const regex = new RegExp(`(${query})`, 'gi');
+                return text.replace(regex, '<mark>$1</mark>');
+            }
+        });
+    </script>
+</body>
+
+</html>

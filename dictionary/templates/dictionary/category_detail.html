@@ -1,0 +1,36 @@
+{% extends 'dictionary/base.html' %}
+
+{% block content %}
+<div class="category-detail category-{{ category.slug }}">
+    <div class="category-header">
+        <h1>{{ category.name }}</h1>
+        {% if category.description %}
+        <p class="category-description">{{ category.description }}</p>
+        {% endif %}
+    </div>
+    
+    {% if words %}
+    <div class="words-section">
+        <h3>So‘zlar ro‘yxati ({{ words|length }} ta)</h3>
+        <div class="words-grid">
+            {% for word in words %}
+            <div class="word-card">
+                <a href="{% url 'word_detail' word.slug %}">
+                    <div class="word-title">{{ word.word }}</div>
+                    <div class="word-meta">{{ word.letter_count }} harf</div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="no-words">
+        <p>Bu kategoriyada hali so‘zlar yo‘q.</p>
+    </div>
+    {% endif %}
+    
+    <div class="back-link">
+        <a href="/">← Bosh sahifaga qaytish</a>
+    </div>
+</div>
+{% endblock %}

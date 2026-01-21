@@ -1,0 +1,25 @@
+{% extends 'dictionary/base.html' %}
+
+{% block content %}
+<div class="list-page">
+    <div class="list-box">
+
+        <h2 class="list-title">{{ title }}</h2>
+
+        <ul class="word-list">
+            {% for word in words %}
+                <li class="word-item">
+                    <a href="{% url 'word_detail' word.slug %}" class="word-link">
+                        {{ word.word }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div class="actions">
+            <a href="/" class="back-link">Orqaga</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
