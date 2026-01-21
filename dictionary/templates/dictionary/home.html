@@ -20,7 +20,7 @@
 </div>
 <div class="main-container">
     <div class="section full-width">
-        <h2>Alfabit bo‘yicha qidirish</h2>
+        <h2>Alifbo bo‘yicha qidirish</h2>
         <div class="alphabet">
             {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
             <a href="{% url 'words_by_letter' letter %}">{{ letter }}</a>
@@ -58,33 +58,6 @@
         <a href="{% url 'category_detail' 'kop-xato-qilinadigan-sozlar' %}" class="see-all">Hammasini ko‘rish</a>
     </div>
 
-    <!-- <div class="section">
-        <h2>Qiziqarli ruknlar</h2>
-        <div class="categories-grid">
-            {% for category in interesting_categories %}
-            <div class="category-card">
-                <a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
 
-    <div class="section">
-        <h2>Harflar soni bo‘yicha</h2>
-        <ul class="word-list">
-            {% for i in "345678910" %}
-            <li><a href="{% url 'words_by_letter_count' i %}">{{ i }} ta harfli so‘zlar</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div class="section">
-        <h2>Siz uchun qiziq bo‘lishi mumkin</h2>
-        <ul class="word-list">
-            {% for word in suggested_words %}
-            <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
-            {% endfor %}
-        </ul>
-    </div> -->
 </div>
 {% endblock %}
