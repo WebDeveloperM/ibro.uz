@@ -43,16 +43,16 @@ INSTALLED_APPS = [
 
 # Jazzmin settings
 JAZZMIN_SETTINGS = {
-    "site_title": "Imlo.uz Admin",
-    "site_header": "Imlo.uz",
-    "site_brand": "Imlo.uz",
+    "site_title": "Ibro.uz Admin",
+    "site_header": "Ibro.uz",
+    "site_brand": "Ibro.uz",
     "site_logo": None,
     "login_logo": None,
     "login_logo_dark": None,
     "site_logo_classes": "img-circle",
     "site_icon": None,
-    "welcome_sign": "Imlo.uz lug'atiga xush kelibsiz",
-    "copyright": "Imlo.uz",
+    "welcome_sign": "Ibro.uz lug'atiga xush kelibsiz",
+    "copyright": "Ibro.uz",
     "search_model": "dictionary.Word",
     "user_avatar": None,
     "topmenu_links": [
