@@ -221,3 +221,8 @@ def robots_txt(request):
         f'Sitemap: {build_absolute_url(reverse("django.contrib.sitemaps.views.sitemap"))}',
     ])
     return HttpResponse(content, content_type='text/plain; charset=utf-8')
+
+
+def google_site_verification(request, filename):
+    content = f'google-site-verification: {filename}.html'
+    return HttpResponse(content, content_type='text/html; charset=utf-8')

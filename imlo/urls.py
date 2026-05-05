@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
-from django.urls import path, include
+from django.urls import include, path, re_path
 
 from dictionary.sitemaps import CategorySitemap, StaticViewSitemap, WordSitemap
-from dictionary.views import robots_txt
+from dictionary.views import google_site_verification, robots_txt
 
 
 sitemaps = {
@@ -30,6 +30,7 @@ sitemaps = {
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    re_path(r'^(?P<filename>google[a-zA-Z0-9]+)\.html$', google_site_verification, name='google_site_verification'),
     path('robots.txt', robots_txt, name='robots_txt'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('', include('dictionary.urls')),
