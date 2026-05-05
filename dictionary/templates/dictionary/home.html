@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="section search-section">
-    <h2>So‘z qidirish</h2>
+    <h1>So‘z qidirish</h1>
     <form action="{% url 'search' %}" method="get" class="search-form">
         <input type="text" name="q" placeholder="So‘z yoki ta’rifni kiriting..." class="search-input" id="search-input">
         <button type="submit" class="search-button">Qidirish</button>
@@ -35,7 +35,7 @@
             <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
             {% endfor %}
         </ul>
-        <a href="{% url 'category_detail' 'most-searched' %}" class="see-all">Hammasini ko‘rish</a>
+        <a href="{% url 'most_searched_words' %}" class="see-all">Hammasini ko‘rish</a>
     </div>
 
     <div class="section">
@@ -45,7 +45,7 @@
             <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
             {% endfor %}
         </ul>
-        <a href="{% url 'category_detail' 'random' %}" class="see-all">Hammasini ko‘rish</a>
+        <a href="{% url 'random_words' %}" class="see-all">Hammasini ko‘rish</a>
     </div>
 
     <div class="section">

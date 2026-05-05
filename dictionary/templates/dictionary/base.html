@@ -5,9 +5,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ibro.uz</title>
-    {% load static %}
+    <title>{{ seo.title|default:"Ibro.uz | O'zbekcha imlo va izohli lug'at" }}</title>
+    <meta name="description" content="{{ seo.description|default:"Ibro.uz orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
+    <meta name="robots" content="{{ seo.robots|default:'index,follow' }}">
+    <link rel="canonical" href="{{ seo.canonical_url|default:request.build_absolute_uri }}">
+    <meta property="og:locale" content="uz_UZ">
+    <meta property="og:type" content="{{ seo.og_type|default:'website' }}">
+    <meta property="og:site_name" content="Ibro.uz">
+    <meta property="og:title" content="{{ seo.title|default:"Ibro.uz | O'zbekcha imlo va izohli lug'at" }}">
+    <meta property="og:description" content="{{ seo.description|default:"Ibro.uz orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
+    <meta property="og:url" content="{{ seo.canonical_url|default:request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ seo.image_url }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ seo.title|default:"Ibro.uz | O'zbekcha imlo va izohli lug'at" }}">
+    <meta name="twitter:description" content="{{ seo.description|default:"Ibro.uz orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
+    <meta name="twitter:image" content="{{ seo.image_url }}">
     <link rel="stylesheet" href="{% static 'dictionary/css/style.css' %}">
+    {% if seo.structured_data_json %}
+    <script type="application/ld+json">{{ seo.structured_data_json|safe }}</script>
+    {% endif %}
 </head>
 
 <body>
