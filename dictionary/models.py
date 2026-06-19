@@ -5,6 +5,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -14,9 +15,10 @@ class Word(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     definition = models.TextField()
     pronunciation = models.CharField(max_length=100, blank=True)
-    letter_count = models.PositiveIntegerField()
+    letter_count = models.PositiveIntegerField(db_index=True)
     categories = models.ManyToManyField(Category, related_name='words', blank=True)
-    search_count = models.PositiveIntegerField(default=0)
+    search_count = models.PositiveIntegerField(default=0, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         # 🔹 so‘zlar sonini avtomatik hisoblash

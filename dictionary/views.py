@@ -1,4 +1,5 @@
 import json
+import random
 
 from django.conf import settings
 from django.db.models import Q
@@ -47,18 +48,25 @@ def build_seo_context(request, *, title, description, robots='index,follow', og_
         }
     }
 
+
+def _random_words_qs(n):
+    """So'zlar jadvalidan n ta tasodifiy yozuvni samarali tanlaydi."""
+    ids = list(Word.objects.values_list('id', flat=True))
+    sample_ids = random.sample(ids, min(n, len(ids)))
+    return Word.objects.filter(id__in=sample_ids).only('word', 'slug')
+
+
 def home(request):
-    most_searched = Word.objects.order_by('-search_count')[:10]
-    random_words = Word.objects.order_by('?')[:6]
-    common_misspelled = Word.objects.filter(categories__slug='kop-xato-qilinadigan-sozlar')[:6]
-    interesting_categories = Category.objects.filter(slug__in=['tesha-tegmagan-sozlar', 'bahorni-soginganlar-uchun', 'shubami_yoki_shobami', 'konstitutsiyamizda-eng-kop-ishlatilgan-sozlar', 'tabrik-sozlar'])
-    suggested_words = Word.objects.order_by('?')[:8]  # Random suggested
+    most_searched = Word.objects.only('word', 'slug').order_by('-search_count')[:10]
+    random_words = _random_words_qs(6)
+    common_misspelled = (
+        Word.objects.filter(categories__slug='kop-xato-qilinadigan-sozlar')
+        .only('word', 'slug')[:6]
+    )
     context = {
         'most_searched': most_searched,
         'random_words': random_words,
         'common_misspelled': common_misspelled,
-        'interesting_categories': interesting_categories,
-        'suggested_words': suggested_words,
     }
     context.update(build_seo_context(
         request,
@@ -76,14 +84,18 @@ def home(request):
     ))
     return render(request, 'dictionary/home.html', context)
 
+
 def word_detail(request, slug):
-    word = get_object_or_404(Word, slug=slug)
+    word = get_object_or_404(
+        Word.objects.prefetch_related('categories'), slug=slug
+    )
     word.search_count += 1
     word.save(update_fields=['search_count'])
     description = word.definition
     if word.pronunciation:
         description = f"{word.word} - /{word.pronunciation}/. {word.definition}"
     context = {'word': word}
+    word_url = build_absolute_url(reverse('word_detail', args=[word.slug]))
     context.update(build_seo_context(
         request,
         title=f"{word.word} ma'nosi va imlosi | {settings.SITE_NAME}",
@@ -95,17 +107,27 @@ def word_detail(request, slug):
                 '@type': 'DefinedTerm',
                 'name': word.word,
                 'description': word.definition,
-                'url': build_absolute_url(reverse('word_detail', args=[word.slug])),
+                'url': word_url,
                 'inDefinedTermSet': f"{settings.SITE_URL}/",
-            }
+            },
+            {
+                '@context': 'https://schema.org',
+                '@type': 'BreadcrumbList',
+                'itemListElement': [
+                    {'@type': 'ListItem', 'position': 1, 'name': 'Bosh sahifa', 'item': f"{settings.SITE_URL}/"},
+                    {'@type': 'ListItem', 'position': 2, 'name': word.word, 'item': word_url},
+                ],
+            },
         ],
     ))
     return render(request, 'dictionary/word_detail.html', context)
 
+
 def category_detail(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    words = category.words.all()
+    words = category.words.only('word', 'slug', 'letter_count')
     description = category.description or f"{category.name} kategoriyasidagi o'zbekcha so'zlar va ularning izohlari ro'yxati."
+    category_url = build_absolute_url(reverse('category_detail', args=[category.slug]))
     context = {'category': category, 'words': words}
     context.update(build_seo_context(
         request,
@@ -117,15 +139,24 @@ def category_detail(request, slug):
                 '@type': 'CollectionPage',
                 'name': category.name,
                 'description': description,
-                'url': build_absolute_url(reverse('category_detail', args=[category.slug])),
-            }
+                'url': category_url,
+            },
+            {
+                '@context': 'https://schema.org',
+                '@type': 'BreadcrumbList',
+                'itemListElement': [
+                    {'@type': 'ListItem', 'position': 1, 'name': 'Bosh sahifa', 'item': f"{settings.SITE_URL}/"},
+                    {'@type': 'ListItem', 'position': 2, 'name': category.name, 'item': category_url},
+                ],
+            },
         ],
     ))
     return render(request, 'dictionary/category_detail.html', context)
 
+
 def words_by_letter_count(request, count):
-    words = Word.objects.filter(letter_count=count)
-    title = f'{count} ta harfli so‘zlar'
+    words = Word.objects.filter(letter_count=count).only('word', 'slug')
+    title = f'{count} ta harfli so’zlar'
     context = {'words': words, 'title': title}
     context.update(build_seo_context(
         request,
@@ -134,51 +165,53 @@ def words_by_letter_count(request, count):
     ))
     return render(request, 'dictionary/words_list.html', context)
 
+
 def search(request):
     query = request.GET.get('q', '').strip()
-    
-    # Check if it's an AJAX request
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        words = []
-        if query:
-            # Fuzzy search logic
-            words = Word.objects.filter(
-                Q(word__icontains=query) |  # Contains query
-                Q(definition__icontains=query) |  # Definition contains query
-                Q(word__istartswith=query)  # Starts with query (higher priority)
-            ).distinct()[:10]  # Limit results for performance
-        
-        # Return JSON response for AJAX
+    is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
+    if is_ajax:
         results = []
-        for word in words:
-            results.append({
-                'word': word.word,
-                'definition': word.definition[:100] + '...' if len(word.definition) > 100 else word.definition,
-                'url': f'/word/{word.slug}/',
-                'letter_count': word.letter_count,
-            })
+        if query:
+            words = (
+                Word.objects.filter(
+                    Q(word__icontains=query) | Q(definition__icontains=query)
+                )
+                .only('word', 'definition', 'slug', 'letter_count')
+                .distinct()[:10]
+            )
+            for word in words:
+                results.append({
+                    'word': word.word,
+                    'definition': word.definition[:100] + '...' if len(word.definition) > 100 else word.definition,
+                    'url': f'/word/{word.slug}/',
+                    'letter_count': word.letter_count,
+                })
         return JsonResponse({'results': results})
-    
-    # Regular search for form submission
+
     words = []
     if query:
-        words = Word.objects.filter(
-            Q(word__icontains=query) |
-            Q(definition__icontains=query)
-        ).distinct()
+        words = (
+            Word.objects.filter(
+                Q(word__icontains=query) | Q(definition__icontains=query)
+            )
+            .only('word', 'definition', 'slug')
+            .distinct()
+        )
 
     context = {'words': words, 'query': query}
     context.update(build_seo_context(
         request,
-        title=f'Qidiruv natijalari: {query or "so‘z"} | {settings.SITE_NAME}',
-        description=f'"{query}" bo‘yicha topilgan o‘zbekcha so‘zlar va izohlar natijasi.',
+        title=f'Qidiruv natijalari: {query or "so’z"} | {settings.SITE_NAME}',
+        description=f'"{query}" bo’yicha topilgan o’zbekcha so’zlar va izohlar natijasi.',
         robots='noindex,follow',
     ))
     return render(request, 'dictionary/search_results.html', context)
 
+
 def words_by_letter(request, letter):
-    words = Word.objects.filter(word__istartswith=letter.upper())
-    title = f'{letter.upper()} harfi bilan boshlanadigan so‘zlar'
+    words = Word.objects.filter(word__istartswith=letter.upper()).only('word', 'slug')
+    title = f'{letter.upper()} harfi bilan boshlanadigan so’zlar'
     context = {'words': words, 'title': title}
     context.update(build_seo_context(
         request,
@@ -189,25 +222,25 @@ def words_by_letter(request, letter):
 
 
 def most_searched_words(request):
-    words = Word.objects.order_by('-search_count', 'word')
-    title = 'Ko‘p qidirilgan so‘zlar'
+    words = Word.objects.only('word', 'slug').order_by('-search_count', 'word')
+    title = 'Ko’p qidirilgan so’zlar'
     context = {'words': words, 'title': title}
     context.update(build_seo_context(
         request,
         title=f"{title} | {settings.SITE_NAME}",
-        description="Ibro.uz foydalanuvchilari eng ko‘p qidirgan o‘zbekcha so‘zlar va ularning izohlari.",
+        description="Ibro.uz foydalanuvchilari eng ko'p qidirgan o'zbekcha so'zlar va ularning izohlari.",
     ))
     return render(request, 'dictionary/words_list.html', context)
 
 
 def random_words(request):
-    words = Word.objects.order_by('?')[:50]
-    title = 'Tasodifiy so‘zlar'
+    words = _random_words_qs(50)
+    title = 'Tasodifiy so’zlar'
     context = {'words': words, 'title': title}
     context.update(build_seo_context(
         request,
         title=f"{title} | {settings.SITE_NAME}",
-        description="Tasodifiy tanlangan o‘zbekcha so‘zlar va ularning izohlarini ko‘ring.",
+        description="Tasodifiy tanlangan o'zbekcha so'zlar va ularning izohlarini ko'ring.",
     ))
     return render(request, 'dictionary/words_list.html', context)
 

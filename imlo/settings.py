@@ -27,16 +27,20 @@ SECRET_KEY = 'django-insecure-=8i=2w6&20j&9)v#8s0&mnn$_xzx7zpd*%+4#ckdwxos%k_26g
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 SITE_NAME = 'Ibro.uz'
-SITE_URL = os.getenv('SITE_URL', 'https://ibro-uz.onrender.com').rstrip('/')
+SITE_URL = os.getenv('SITE_URL', 'https://ibro.uz').rstrip('/')
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv('ALLOWED_HOSTS', 'ibro-uz.onrender.com,localhost,127.0.0.1').split(',')
+    for host in os.getenv('ALLOWED_HOSTS', 'ibro.uz,www.ibro.uz,ibro-uz.onrender.com,localhost,127.0.0.1').split(',')
     if host.strip()
 ]
 if 'testserver' not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append('testserver')
 
-CSRF_TRUSTED_ORIGINS = [SITE_URL]
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv('CSRF_TRUSTED_ORIGINS', f'{SITE_URL},https://www.ibro.uz,https://ibro-uz.onrender.com').split(',')
+    if origin.strip()
+]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
 
@@ -168,9 +172,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uz'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 

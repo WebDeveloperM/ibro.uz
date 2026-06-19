@@ -30,10 +30,13 @@ class CategorySitemap(CanonicalDomainSitemap):
     protocol = 'https'
 
     def items(self):
-        return Category.objects.order_by('name')
+        return Category.objects.only('slug', 'name', 'updated_at').order_by('name')
 
     def location(self, item):
         return reverse('category_detail', args=[item.slug])
+
+    def lastmod(self, item):
+        return item.updated_at
 
 
 class WordSitemap(CanonicalDomainSitemap):
@@ -42,7 +45,10 @@ class WordSitemap(CanonicalDomainSitemap):
     protocol = 'https'
 
     def items(self):
-        return Word.objects.order_by('word')
+        return Word.objects.only('slug', 'word', 'updated_at').order_by('word')
 
     def location(self, item):
         return reverse('word_detail', args=[item.slug])
+
+    def lastmod(self, item):
+        return item.updated_at

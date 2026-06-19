@@ -8,7 +8,10 @@
     <title>{{ seo.title|default:"Ibro.uz | O'zbekcha imlo va izohli lug'at" }}</title>
     <meta name="description" content="{{ seo.description|default:"Ibro.uz orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
     <meta name="robots" content="{{ seo.robots|default:'index,follow' }}">
+    <meta name="keywords" content="{{ seo.keywords|default:"o'zbekcha lug'at, o'zbek so'zlari, imlo, so'z ma'nosi, ibro.uz, o'zbek tili" }}">
     <link rel="canonical" href="{{ seo.canonical_url|default:request.build_absolute_uri }}">
+    <link rel="alternate" hreflang="uz" href="{{ seo.canonical_url|default:request.build_absolute_uri }}">
+    <link rel="alternate" hreflang="x-default" href="{{ seo.canonical_url|default:request.build_absolute_uri }}">
     <meta property="og:locale" content="uz_UZ">
     <meta property="og:type" content="{{ seo.og_type|default:'website' }}">
     <meta property="og:site_name" content="Ibro.uz">
@@ -29,9 +32,9 @@
 <body>
     <header>
         <nav class="container">
-            <h1>
-                <a href="/"> <img src="{% static 'images/logo.png' %}" alt="Ibro.uz Logo" width="200"></a>
-            </h1>
+            <div class="site-logo">
+                <a href="/"> <img src="{% static 'images/logo.png' %}" alt="Ibro.uz - O'zbekcha imlo va izohli lug'at" width="200"></a>
+            </div>
             <ul>
                 <li><a style="font-size: large;" href="/">Bosh sahifa</a></li>
                 <li><a style="font-size: large;" href="/admin/">Admin</a></li>
@@ -124,8 +127,8 @@
 
             function highlightMatch(text, query) {
                 if (!query) return text;
-
-                const regex = new RegExp(`(${query})`, 'gi');
+                const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${escaped})`, 'gi');
                 return text.replace(regex, '<mark>$1</mark>');
             }
         });

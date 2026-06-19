@@ -2,8 +2,9 @@
 
 {% block content %}
 <div class="section search-section">
-    <h1>So‘z qidirish</h1>
-    <form action="{% url 'search' %}" method="get" class="search-form">
+    <h1>O’zbekcha imlo va izohli lug’at</h1>
+    <p class="site-tagline">So’zning to’g’ri imlosi, ma’nosi va talaffuzini toping</p>
+    <form action="{% url ‘search’ %}" method="get" class="search-form">
         <input type="text" name="q" placeholder="So‘z yoki ta’rifni kiriting..." class="search-input" id="search-input">
         <button type="submit" class="search-button">Qidirish</button>
     </form>
