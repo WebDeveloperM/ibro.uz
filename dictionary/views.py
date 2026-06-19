@@ -70,8 +70,8 @@ def home(request):
     }
     context.update(build_seo_context(
         request,
-        title="Ibro.uz | O'zbekcha imlo va izohli lug'at",
-        description="Ibro.uz orqali o'zbekcha so'zlarning to'g'ri imlosi, ma'nosi, talaffuzi va kategoriyalar bo'yicha lug'at natijalarini toping.",
+        title="Ibroo.uz | O'zbekcha imlo va izohli lug'at",
+        description="Ibroo.uz (ibro.uz) orqali o'zbekcha so'zlarning to'g'ri imlosi, ma'nosi, talaffuzi va kategoriyalar bo'yicha lug'at natijalarini toping.",
         structured_data=[
             {
                 '@context': 'https://schema.org',
@@ -228,7 +228,7 @@ def most_searched_words(request):
     context.update(build_seo_context(
         request,
         title=f"{title} | {settings.SITE_NAME}",
-        description="Ibro.uz foydalanuvchilari eng ko'p qidirgan o'zbekcha so'zlar va ularning izohlari.",
+        description="Ibroo.uz (ibro.uz) foydalanuvchilari eng ko'p qidirgan o'zbekcha so'zlar va ularning izohlari.",
     ))
     return render(request, 'dictionary/words_list.html', context)
 

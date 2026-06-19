@@ -5,23 +5,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ seo.title|default:"Ibro.uz | O'zbekcha imlo va izohli lug'at" }}</title>
-    <meta name="description" content="{{ seo.description|default:"Ibro.uz orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
+    <title>{{ seo.title|default:"Ibroo.uz | O'zbekcha imlo va izohli lug'at" }}</title>
+    <meta name="description" content="{{ seo.description|default:"Ibroo.uz (ibro.uz) orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
     <meta name="robots" content="{{ seo.robots|default:'index,follow' }}">
-    <meta name="keywords" content="{{ seo.keywords|default:"o'zbekcha lug'at, o'zbek so'zlari, imlo, so'z ma'nosi, ibro.uz, o'zbek tili" }}">
+    <meta name="keywords" content="{{ seo.keywords|default:"o'zbekcha lug'at, o'zbek so'zlari, imlo, so'z ma'nosi, ibroo.uz, ibro.uz, o'zbek tili lug'ati" }}">
     <link rel="canonical" href="{{ seo.canonical_url|default:request.build_absolute_uri }}">
     <link rel="alternate" hreflang="uz" href="{{ seo.canonical_url|default:request.build_absolute_uri }}">
     <link rel="alternate" hreflang="x-default" href="{{ seo.canonical_url|default:request.build_absolute_uri }}">
     <meta property="og:locale" content="uz_UZ">
     <meta property="og:type" content="{{ seo.og_type|default:'website' }}">
-    <meta property="og:site_name" content="Ibro.uz">
-    <meta property="og:title" content="{{ seo.title|default:"Ibro.uz | O'zbekcha imlo va izohli lug'at" }}">
-    <meta property="og:description" content="{{ seo.description|default:"Ibro.uz orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
+    <meta property="og:site_name" content="Ibroo.uz">
+    <meta property="og:title" content="{{ seo.title|default:"Ibroo.uz | O'zbekcha imlo va izohli lug'at" }}">
+    <meta property="og:description" content="{{ seo.description|default:"Ibroo.uz (ibro.uz) orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
     <meta property="og:url" content="{{ seo.canonical_url|default:request.build_absolute_uri }}">
     <meta property="og:image" content="{{ seo.image_url }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ seo.title|default:"Ibro.uz | O'zbekcha imlo va izohli lug'at" }}">
-    <meta name="twitter:description" content="{{ seo.description|default:"Ibro.uz orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
+    <meta name="twitter:title" content="{{ seo.title|default:"Ibroo.uz | O'zbekcha imlo va izohli lug'at" }}">
+    <meta name="twitter:description" content="{{ seo.description|default:"Ibroo.uz (ibro.uz) orqali o'zbek tilidagi so'zlarning imlosi, ma'nosi va talaffuzini toping." }}">
     <meta name="twitter:image" content="{{ seo.image_url }}">
     <link rel="stylesheet" href="{% static 'dictionary/css/style.css' %}">
     {% if seo.structured_data_json %}
@@ -33,7 +33,7 @@
     <header>
         <nav class="container">
             <div class="site-logo">
-                <a href="/"> <img src="{% static 'images/logo.png' %}" alt="Ibro.uz - O'zbekcha imlo va izohli lug'at" width="200"></a>
+                <a href="/"> <img src="{% static 'images/logo.png' %}" alt="Ibroo.uz - O'zbekcha imlo va izohli lug'at" width="200"></a>
             </div>
             <ul>
                 <li><a style="font-size: large;" href="/">Bosh sahifa</a></li>
@@ -45,7 +45,7 @@
         {% block content %}{% endblock %}
     </main>
     <footer class="site-footer">
-        <p>&copy; 2026 Ibro.uz - O'zbek tiling izohli lug'ati asosida tuzilgan Lingvomadaniy lug'at.</p>
+        <p>&copy; 2026 Ibroo.uz - O'zbek tiling izohli lug'ati asosida tuzilgan Lingvomadaniy lug'at.</p>
     </footer>
 
     <script>

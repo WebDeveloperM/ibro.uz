@@ -26,11 +26,11 @@ SECRET_KEY = 'django-insecure-=8i=2w6&20j&9)v#8s0&mnn$_xzx7zpd*%+4#ckdwxos%k_26g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-SITE_NAME = 'Ibro.uz'
-SITE_URL = os.getenv('SITE_URL', 'https://ibro.uz').rstrip('/')
+SITE_NAME = 'Ibroo.uz'
+SITE_URL = os.getenv('SITE_URL', 'https://ibroo.uz').rstrip('/')
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv('ALLOWED_HOSTS', 'ibro.uz,www.ibro.uz,ibro-uz.onrender.com,localhost,127.0.0.1').split(',')
+    for host in os.getenv('ALLOWED_HOSTS', 'ibroo.uz,www.ibroo.uz,ibro-uz.onrender.com,localhost,127.0.0.1').split(',')
     if host.strip()
 ]
 if 'testserver' not in ALLOWED_HOSTS:
@@ -38,7 +38,7 @@ if 'testserver' not in ALLOWED_HOSTS:
 
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
-    for origin in os.getenv('CSRF_TRUSTED_ORIGINS', f'{SITE_URL},https://www.ibro.uz,https://ibro-uz.onrender.com').split(',')
+    for origin in os.getenv('CSRF_TRUSTED_ORIGINS', f'{SITE_URL},https://www.ibroo.uz,https://ibro-uz.onrender.com').split(',')
     if origin.strip()
 ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -61,16 +61,16 @@ INSTALLED_APPS = [
 
 # Jazzmin settings
 JAZZMIN_SETTINGS = {
-    "site_title": "Ibro.uz Admin",
-    "site_header": "Ibro.uz",
-    "site_brand": "Ibro.uz",
+    "site_title": "Ibroo.uz Admin",
+    "site_header": "Ibroo.uz",
+    "site_brand": "Ibroo.uz",
     "site_logo": None,
     "login_logo": None,
     "login_logo_dark": None,
     "site_logo_classes": "img-circle",
     "site_icon": None,
-    "welcome_sign": "Ibro.uz lug'atiga xush kelibsiz",
-    "copyright": "Ibro.uz",
+    "welcome_sign": "Ibroo.uz lug'atiga xush kelibsiz",
+    "copyright": "Ibroo.uz",
     "search_model": "dictionary.Word",
     "user_avatar": None,
     "topmenu_links": [
@@ -118,7 +118,14 @@ MIDDLEWARE = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 ROOT_URLCONF = 'imlo.urls'
 
 TEMPLATES = [

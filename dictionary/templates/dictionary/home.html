@@ -2,10 +2,10 @@
 
 {% block content %}
 <div class="section search-section">
-    <h1>O’zbekcha imlo va izohli lug’at</h1>
-    <p class="site-tagline">So’zning to’g’ri imlosi, ma’nosi va talaffuzini toping</p>
-    <form action="{% url ‘search’ %}" method="get" class="search-form">
-        <input type="text" name="q" placeholder="So‘z yoki ta’rifni kiriting..." class="search-input" id="search-input">
+    <h1>O&#x2018;zbekcha imlo va izohli lug&#x2019;at</h1>
+    <p class="site-tagline">So&#x2018;zning to&#x2018;g&#x2019;ri imlosi, ma&#x2019;nosi va talaffuzini toping</p>
+    <form action="{% url 'search' %}" method="get" class="search-form">
+        <input type="text" name="q" placeholder="So&#x2018;z yoki ta&#x2019;rifni kiriting..." class="search-input" id="search-input">
         <button type="submit" class="search-button">Qidirish</button>
     </form>
 
@@ -21,7 +21,7 @@
 </div>
 <div class="main-container">
     <div class="section full-width">
-        <h2>Alifbo bo‘yicha qidirish</h2>
+        <h2>Alifbo bo&#x2018;yicha qidirish</h2>
         <div class="alphabet">
             {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
             <a href="{% url 'words_by_letter' letter %}">{{ letter }}</a>
@@ -30,33 +30,33 @@
     </div>
 
     <div class="section">
-        <h2>Ko‘p qidirilgan so‘zlar</h2>
+        <h2>Ko&#x2018;p qidirilgan so&#x2018;zlar</h2>
         <ul class="word-list">
             {% for word in most_searched %}
             <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
             {% endfor %}
         </ul>
-        <a href="{% url 'most_searched_words' %}" class="see-all">Hammasini ko‘rish</a>
+        <a href="{% url 'most_searched_words' %}" class="see-all">Hammasini ko&#x2018;rish</a>
     </div>
 
     <div class="section">
-        <h2>Tasodifiy so‘zlar</h2>
+        <h2>Tasodifiy so&#x2018;zlar</h2>
         <ul class="word-list">
             {% for word in random_words %}
             <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
             {% endfor %}
         </ul>
-        <a href="{% url 'random_words' %}" class="see-all">Hammasini ko‘rish</a>
+        <a href="{% url 'random_words' %}" class="see-all">Hammasini ko&#x2018;rish</a>
     </div>
 
     <div class="section">
-        <h2>Ko‘p xato qilinadigan so‘zlar</h2>
+        <h2>Ko&#x2018;p xato qilinadigan so&#x2018;zlar</h2>
         <ul class="word-list">
             {% for word in common_misspelled %}
             <li><a href="{% url 'word_detail' word.slug %}">{{ word.word }}</a></li>
             {% endfor %}
         </ul>
-        <a href="{% url 'category_detail' 'kop-xato-qilinadigan-sozlar' %}" class="see-all">Hammasini ko‘rish</a>
+        <a href="{% url 'category_detail' 'kop-xato-qilinadigan-sozlar' %}" class="see-all">Hammasini ko&#x2018;rish</a>
     </div>
 
 
